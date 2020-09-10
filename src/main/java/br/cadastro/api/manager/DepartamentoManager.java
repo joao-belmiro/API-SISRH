@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.cadastro.api.models.Departamento;
 import br.cadastro.api.repository.DepartamentoRepository;
+import br.cadastro.api.repository.projections.DepartamentoDash;
+import br.cadastro.api.repository.projections.DepartamentoProjection;
 
 @Service
 public class DepartamentoManager {
@@ -30,8 +32,11 @@ public class DepartamentoManager {
 	public List<Departamento> buscarTodos (){
 		return departamentoRepository.findAll();
 	}
-	public List<Departamento> buscarPorTag (String tag){
+	public List<DepartamentoProjection> buscarPorTag (String tag){
 		return departamentoRepository.findByTag(tag);
+	}
+	public List<DepartamentoDash> PopularDash () {
+		return departamentoRepository.findAllBy();
 	}
 	
 }

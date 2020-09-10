@@ -2,8 +2,8 @@ package br.cadastro.api.models;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,30 +12,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 
 
 @Entity
-@Table(name = "FUNCIOANARIO")
-public class Funcionario  implements Serializable {
+@Table(name = "COLABORADOR")
+public class Colaborador  implements Serializable {
 
 	private static final long serialVersionUID = 5240480156666113067L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name ="ID_FUNCIONARIO")
-	private long idFuncionario;
+	@Column(name ="ID_COLABORADOR")
+	private long idColaborador;
 	
 	@NotNull
-	@Column(name = "NOME_FUNCIONARIO")
-	private String nomeFuncionario;
+	@Column(name = "NOME_COLABORADOR")
+	private String nomeColaborador;
 	
 	@Column(name="CPF_CNPJ",nullable = false)
 	private String cpfCnpj;
@@ -44,32 +46,40 @@ public class Funcionario  implements Serializable {
 	private double salario;
 	
 	@DateTimeFormat(iso = ISO.DATE_TIME)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm", locale = "pt-BR", timezone = "America/Belem")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "America/Belem")
 	@Column(name = "DATA_CONTRATACAO", nullable = false)
 	private Date dataContratacao;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm", locale = "pt-BR", timezone = "America/Belem")
-	@Column(name="DATA_DEMISSAO")
-	private Date dataDemissao;
-	
+		
 	@Column(name="TELEFONE")
 	private String telefone;
 	
 	@Column(name="EMAIL")
 	private String email;
 	
-	@ManyToOne
+	@ManyToOne( fetch = FetchType.EAGER)
 	@JoinColumn(name = "ID_DEPARTAMENTO_FK")
 	private Departamento departamento;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="ID_CARGO_FK")
 	private Cargo cargo;
 	
-	@OneToMany(mappedBy = "funcionario",fetch = FetchType.LAZY) //lembrar qual colocar
-	private List<Endereco> enderecos;
+	@OneToOne(mappedBy = "colaborador",fetch = FetchType.LAZY, cascade = CascadeType.ALL) //lembrar qual colocar
+	private Endereco endereco;
 
+	@JsonIgnore
+	public String getNomeCargo () {
+		return cargo.getNomeCargo();
+	}
 	
+	public String getCpfCnpj() {
+		return cpfCnpj;
+	}
+
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = cpfCnpj;
+	}
+
 	public Departamento getDepartamento() {
 		return departamento;
 	}
@@ -102,28 +112,28 @@ public class Funcionario  implements Serializable {
 		this.email = email;
 	}
 
-	public List<Endereco> getEnderecos() {
-		return enderecos;
+	public Endereco getEndereco() {
+		return endereco;
 	}
 
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+	
+	public long getIdColaborador() {
+		return idColaborador;
 	}
 
-	public long getIdFuncionario() {
-		return idFuncionario;
+	public void setIdColaborador(long idColaborador) {
+		this.idColaborador = idColaborador;
 	}
 
-	public void setIdFuncionario(long idFuncionario) {
-		this.idFuncionario = idFuncionario;
+	public String getNomeColaborador() {
+		return nomeColaborador;
 	}
 
-	public String getNomeFuncionario() {
-		return nomeFuncionario;
-	}
-
-	public void setNomeFuncionario(String nomeFuncionario) {
-		this.nomeFuncionario = nomeFuncionario;
+	public void setNomeColaborador(String nomeColaborador) {
+		this.nomeColaborador = nomeColaborador;
 	}
 
 	public double getSalario() {
@@ -141,15 +151,7 @@ public class Funcionario  implements Serializable {
 	public void setDataContratacao(Date dataContratacao) {
 		this.dataContratacao = dataContratacao;
 	}
-
-	public Date getDataDemissao() {
-		return dataDemissao;
-	}
-
-	public void setDataDemissao(Date dataDemissao) {
-		this.dataDemissao = dataDemissao;
-	}
-
+	
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

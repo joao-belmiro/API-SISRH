@@ -5,11 +5,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="CARGO")
@@ -28,8 +31,9 @@ public class Cargo implements Serializable {
 	@Column(name = "DESCRICAO_CARGO", nullable = false)
 	private String descricaoCargo;
 	
-	@OneToMany(mappedBy = "cargo" ,targetEntity = Funcionario.class)
-	private List<Funcionario> funcionario;
+	@JsonBackReference
+	@OneToMany(mappedBy = "cargo",fetch = FetchType.LAZY)
+	private List<Colaborador> colaboradores;
 
 	public long getIdCargo() {
 		return idCargo;
@@ -55,14 +59,22 @@ public class Cargo implements Serializable {
 		this.descricaoCargo = descricaoCargo;
 	}
 
-	public List<Funcionario> getFuncionario() {
-		return funcionario;
+	public List<Colaborador> getColaboradores() {
+		return colaboradores;
 	}
 
-	public void setFuncionario(List<Funcionario> funcionario) {
-		this.funcionario = funcionario;
+	public void setColaboradores(List<Colaborador> colaborador) {
+		this.colaboradores = colaborador;
 	}
 
-
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
+	@JsonIgnore
+	public int getNCargos () {
+		return colaboradores.size();
+	}
+
+
 }

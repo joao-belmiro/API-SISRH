@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import br.cadastro.api.models.Cargo;
 import br.cadastro.api.repository.CargoRepository;
+import br.cadastro.api.repository.projections.CargoDashProjection;
+import br.cadastro.api.repository.projections.CargoProjection;
 
 @Service
 public class CargoManager {
@@ -30,8 +32,11 @@ public class CargoManager {
 	public List<Cargo> buscarTodos () {
 		return cargoRepository.findAll();
 	}
-	public List<Cargo> buscarPorTag(String tag){
+	public List<CargoProjection> buscarPorTag (String tag) {
 		return cargoRepository.findByTag(tag);
+	}
+	public List<CargoDashProjection> chartData () {
+		return cargoRepository.findAllBy();
 	}
 
 }

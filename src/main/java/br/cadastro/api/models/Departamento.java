@@ -2,14 +2,20 @@ package br.cadastro.api.models;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "DEPARTAMENTO")
@@ -29,8 +35,9 @@ public class Departamento implements Serializable {
 	@Column(name="DESCRICAO_DEPARTAMENTO")
 	private String descricao;
 	
-	@OneToMany(mappedBy = "departamento")
-	private List<Funcionario> funcionario;
+	@JsonBackReference
+	@OneToMany(mappedBy = "departamento", fetch = FetchType.LAZY)
+	private List<Colaborador> colaboradores;
 
 	public String getNomeDepartamento() {
 		return nomeDepartamento;
@@ -56,13 +63,32 @@ public class Departamento implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public List<Funcionario> getFuncionario() {
-		return funcionario;
+	public List<Colaborador> getColaboradores() {
+		return colaboradores;
 	}
 
-	public void setFuncionario(List<Funcionario> funcionario) {
-		this.funcionario = funcionario;
+	public void setColaboradores(List<Colaborador> colaborador) {
+		this.colaboradores = colaborador;
 	}
+	@JsonIgnore
+	public int getNColaboradores () {
+		return colaboradores.size();
+	}
+	
+	@JsonIgnore
+	public double getCustoDepartamento () {
+		return colaboradores.stream().mapToDouble(colab -> colab.getSalario()).sum();
+	}
+	@JsonIgnore
+	public Map<String, Long> getCountCargos () {
+		Map<String, Long> grafico = colaboradores.stream().collect(Collectors.groupingBy(c -> c.getNomeCargo(), Collectors.counting())); 
+		return grafico;
+	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
  
 	
 }

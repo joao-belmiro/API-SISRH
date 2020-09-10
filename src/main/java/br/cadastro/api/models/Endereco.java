@@ -4,12 +4,17 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name= "ENDERECO")
@@ -30,19 +35,11 @@ public class Endereco implements Serializable {
 	@Column(name = "COMPLEMENTO", nullable = false)	
 	private String complemento;
 	
-	@Column(name = "LOGRADOURO", nullable = false)	
-	private String logradouro;
-	
-	@Column(name = "CIDADE", nullable = false)		
-	private String cidade;
-	
-	@Column(name = "UF", nullable = false)	
-	private String estado;
-	
-	@ManyToOne
+	@JsonBackReference
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="ID_FUNCIONARIO_FK")
-	private Funcionario funcionario;
-
+	private Colaborador colaborador;
+	
 	public long getIdEndereco() {
 		return idEndereco;
 	}
@@ -75,38 +72,17 @@ public class Endereco implements Serializable {
 		this.complemento = complemento;
 	}
 
-	public String getLogradouro() {
-		return logradouro;
+	public Colaborador getColaborador() {
+		return colaborador;
 	}
 
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
+	public void setColaborador(Colaborador colaborador) {
+		this.colaborador = colaborador;
 	}
 
-	public String getCidade() {
-		return cidade;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Funcionario getFuncionario() {
-		return funcionario;
-	}
-
-	public void setFuncionario(Funcionario funcionario) {
-		this.funcionario = funcionario;
-	}
-	
-	
-	
+		
 }

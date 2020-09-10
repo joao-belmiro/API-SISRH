@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.cadastro.api.manager.CargoManager;
 import br.cadastro.api.models.Cargo;
+import br.cadastro.api.repository.projections.CargoDashProjection;
+import br.cadastro.api.repository.projections.CargoProjection;
 
+@CrossOrigin("*")
 @RestController
-@RequestMapping("geranciamento-cargo")
+@RequestMapping("gerenciamento-cargo")
 public class CargoController {
 	
 	@Autowired
@@ -47,14 +51,19 @@ public class CargoController {
 		return new ResponseEntity<List<Cargo>>(todosCargos, HttpStatus.OK);
 	}
 	@GetMapping("filtro")
-	public @ResponseBody ResponseEntity<List<Cargo>> todosCargos (@RequestParam String tag) {
-		List<Cargo> filtroCargos = cargoManager.buscarPorTag(tag);
-		return new ResponseEntity<List<Cargo>>(filtroCargos, HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<CargoProjection>> todosCargos (@RequestParam String tag) {
+		List<CargoProjection> filtroCargos = cargoManager.buscarPorTag(tag);
+		return new ResponseEntity<List<CargoProjection>>(filtroCargos, HttpStatus.OK);
 	}
 	@GetMapping("cargo-por-id/{id}")
 	public @ResponseBody ResponseEntity<Cargo> CargoPorId (@PathVariable long id) {
 		Cargo cargo = cargoManager.buscarPorId(id).orElse(null);
 		return new ResponseEntity<Cargo>(cargo, HttpStatus.OK);
+	}
+	@GetMapping("pie-chart-data")
+	public @ResponseBody ResponseEntity<List<CargoDashProjection>> chartData () {
+		List<CargoDashProjection> data = cargoManager.chartData();
+		return new ResponseEntity<List<CargoDashProjection>>(data, HttpStatus.OK);
 	}
 	
 

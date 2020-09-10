@@ -7,11 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import br.cadastro.api.models.Cargo;
+import br.cadastro.api.repository.projections.CargoDashProjection;
+import br.cadastro.api.repository.projections.CargoProjection;
 
 @Repository
 public interface CargoRepository extends JpaRepository<Cargo, Long>{
 
-	@Query("select c from Cargo c where c.nomeCargo like %:tag%")
-	List<Cargo> findByTag(String tag);
+	@Query("select c from Cargo c where UPPER(c.nomeCargo) like concat('%',upper(:tag),'%')")
+	List<CargoProjection> findByTag(String tag);
+	
+	List<CargoDashProjection> findAllBy();
 	
 }

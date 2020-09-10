@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.cadastro.api.manager.DepartamentoManager;
 import br.cadastro.api.models.Departamento;
-
+import br.cadastro.api.repository.projections.DepartamentoDash;
+import br.cadastro.api.repository.projections.DepartamentoProjection;
+@CrossOrigin("*")
 @RestController
 @RequestMapping("gerenciamento-departamento")
 public class DepartamentoController {
@@ -41,7 +44,7 @@ public class DepartamentoController {
 			return new ResponseEntity<Departamento>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	@DeleteMapping("deletar-Departamento/{id}")
+	@DeleteMapping("deletar-departamento/{id}")
 	public @ResponseBody ResponseEntity<Departamento> deletarDepartamento (@PathVariable Long id) {
 		departamentoManager.deletarPorId(id);
 		return new ResponseEntity<Departamento>(HttpStatus.NO_CONTENT);
@@ -52,9 +55,19 @@ public class DepartamentoController {
 		return new ResponseEntity<Departamento>(departamento,HttpStatus.OK);
 	}
 	@GetMapping("buscar-por-tag")
-	public @ResponseBody ResponseEntity<List<Departamento>> departamentoPorTag(@RequestParam String tag) {
-		List<Departamento> departamentos = departamentoManager.buscarPorTag(tag);
+	public @ResponseBody ResponseEntity<List<DepartamentoProjection>> departamentoPorTag(@RequestParam String tag) {
+		List<DepartamentoProjection> departamentos = departamentoManager.buscarPorTag(tag);
+		return new ResponseEntity<List<DepartamentoProjection>>(departamentos,HttpStatus.OK);
+	}
+	@GetMapping("todos")
+	public @ResponseBody ResponseEntity<List<Departamento>> departamentoPorTag() {
+		List<Departamento> departamentos = departamentoManager.buscarTodos();
 		return new ResponseEntity<List<Departamento>>(departamentos,HttpStatus.OK);
+	}
+	@GetMapping("popular-dash")
+	public @ResponseBody ResponseEntity<List<DepartamentoDash>> departamentoDashBoard() {
+		List<DepartamentoDash> departamentos = departamentoManager.PopularDash();
+		return new ResponseEntity<List<DepartamentoDash>>(departamentos, HttpStatus.OK);
 	}
 
 }
