@@ -23,7 +23,7 @@ public class Cargo implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID_CARGO")
-	private long idCargo;
+	private Long idCargo;
 	
 	@Column(name = "NOME_CARGO", nullable = false)
 	private String nomeCargo;
@@ -35,11 +35,11 @@ public class Cargo implements Serializable {
 	@OneToMany(mappedBy = "cargo",fetch = FetchType.LAZY)
 	private List<Colaborador> colaboradores;
 
-	public long getIdCargo() {
+	public Long getIdCargo() {
 		return idCargo;
 	}
 
-	public void setIdCargo(long idCargo) {
+	public void setIdCargo(Long idCargo) {
 		this.idCargo = idCargo;
 	}
 
