@@ -40,22 +40,21 @@ public class ColaboradorController {
 
 	@PostMapping("salvar-colaborador")
 	public @ResponseBody ResponseEntity<Colaborador> salvarFuncionario(@RequestBody Colaborador colaborador)
-			throws IllegalArgumentException, ValidationException {
+			throws IllegalArgumentException, ValidationException, NullPointerException {
 		if (colaborador.getDepartamento().getIdDepartamento() == null) {
 			throw new IllegalArgumentException("Não é possivel cadastrar um colaborador sem Departamento");
 		}
 		if (colaborador.getCargo().getIdCargo() == null) {
 			throw new IllegalArgumentException("Não é possivel cadastrar um Colaborador sem Cargo");
-		}
-		else {
+		} else {
 			Colaborador func = colaboradorManager.salvar(colaborador);
 			return new ResponseEntity<Colaborador>(func, HttpStatus.CREATED);
 		}
 	}
 
 	@PutMapping("alterar-colaborador")
-	public @ResponseBody ResponseEntity<Colaborador> alterarFuncionario(@RequestBody Colaborador colaborador) throws  NotFoundException, NullPointerException {
-		
+	public @ResponseBody ResponseEntity<Colaborador> alterarFuncionario(@RequestBody Colaborador colaborador)
+			throws NotFoundException {
 		Colaborador funcionarioLocalizado = colaboradorManager.buscarPorId(colaborador.getIdColaborador()).orElse(null);
 		if (funcionarioLocalizado == null) {
 			throw new NotFoundException("Colaborador Inexistente");
@@ -64,18 +63,17 @@ public class ColaboradorController {
 			return new ResponseEntity<Colaborador>(HttpStatus.NO_CONTENT);
 		}
 	}
-
 	@DeleteMapping("deletar/{id}")
-	public @ResponseBody ResponseEntity<Colaborador> deletarFuncionario(@PathVariable Long id) {
+	public @ResponseBody ResponseEntity<Colaborador> deletarFuncionario(@PathVariable Long id)
+			throws NotFoundException {
 		Colaborador funcionarioLocalizado = colaboradorManager.buscarPorId(id).orElse(null);
 		if (funcionarioLocalizado != null) {
 			colaboradorManager.deletarPorId(id);
 			return new ResponseEntity<Colaborador>(HttpStatus.NO_CONTENT);
 		} else {
-			return new ResponseEntity<Colaborador>(HttpStatus.BAD_REQUEST);
+			throw new NotFoundException("Colaborador não pode ser localizado ou nao existe");
 		}
 	}
-
 	@GetMapping("buscar-por-tag")
 	public @ResponseBody ResponseEntity<List<Colaborador>> buscarTag(@RequestParam(required = true) String tag) {
 		if (tag == null || tag == "") {
@@ -85,19 +83,20 @@ public class ColaboradorController {
 			return new ResponseEntity<List<Colaborador>>(funcionarios, HttpStatus.OK);
 		}
 	}
-
 	@GetMapping("/{id}")
-	public @ResponseBody ResponseEntity<Colaborador> buscarPorId(@PathVariable Long id) {
+	public @ResponseBody ResponseEntity<Colaborador> buscarPorId(@PathVariable Long id) throws NotFoundException {
 		Colaborador funcionarioLocalizado = colaboradorManager.buscarPorId(id).orElse(null);
-		return new ResponseEntity<Colaborador>(funcionarioLocalizado, HttpStatus.OK);
+		if (funcionarioLocalizado == null) {
+			throw new NotFoundException("O Código" + id + "não Localizou Nenhum Colaborador");
+		} else {
+			return new ResponseEntity<Colaborador>(funcionarioLocalizado, HttpStatus.OK);
+		}
 	}
-
 	@GetMapping("novos-colabs")
 	public @ResponseBody ResponseEntity<List<Colaborador>> novosColabs() {
 		List<Colaborador> colabs = colaboradorManager.novosColabs();
 		return new ResponseEntity<List<Colaborador>>(colabs, HttpStatus.OK);
 	}
-
 	@GetMapping("colaboradores-departamento")
 	public @ResponseBody ResponseEntity<List<Colaborador>> colabsDepartamento(
 			@RequestParam(required = true) long idDepartamento) {

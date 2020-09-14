@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import br.cadastro.api.models.Cargo;
 import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.models.Departamento;
 import br.cadastro.api.repository.ColaboradorRepository;
@@ -43,6 +44,9 @@ public class ColaboradorManager {
 		return colaboradorRepository.findTop10By();		
 	}
 	public List<Colaborador> colaboradoresDepartamento (Departamento departamento) {
-		return colaboradorRepository.findByDepartamento(departamento);	
+		return colaboradorRepository.findByDepartamento(departamento);
+	}
+	public Optional<Colaborador> buscarPorCargo (Cargo cargo) {
+		return colaboradorRepository.findByCargo(cargo);
 	}
 }

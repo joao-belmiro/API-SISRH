@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.cadastro.api.dto.EnderecoDto;
 import br.cadastro.api.manager.EnderecoManager;
 import br.cadastro.api.manager.ColaboradorManager;
-import br.cadastro.api.models.Endereco;
 import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.repository.projections.EnderecoProjetction;
 

@@ -26,6 +26,7 @@ public class Cargo implements Serializable {
 	private Long idCargo;
 	
 	@Column(name = "NOME_CARGO", nullable = false)
+	
 	private String nomeCargo;
 	
 	@Column(name = "DESCRICAO_CARGO", nullable = false)

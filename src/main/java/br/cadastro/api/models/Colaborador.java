@@ -14,14 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.sun.istack.NotNull;
+
 
 
 @Entity
@@ -35,10 +35,11 @@ public class Colaborador  implements Serializable {
 	@Column(name ="ID_COLABORADOR")
 	private long idColaborador;
 	
-	@NotNull
-	@Column(name = "NOME_COLABORADOR")
+	@NotNull(message="Nome do Colaborador não pode Ser Nulo")
+	@Column(name = "NOME_COLABORADOR",nullable = false)
 	private String nomeColaborador;
 	
+	@NotNull(message="O Número do documentpo não pode Ser Nulo")
 	@Column(name="CPF_CNPJ",nullable = false)
 	private String cpfCnpj;
 	
