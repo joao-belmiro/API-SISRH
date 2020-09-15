@@ -2,12 +2,9 @@ package br.cadastro.api.repository;
 
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import br.cadastro.api.models.Cargo;
 import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.models.Departamento;
@@ -23,5 +20,5 @@ public interface ColaboradorRepository extends JpaRepository<Colaborador, Long> 
 	
 	List<Colaborador> findByDepartamento (Departamento departamento);
 	
-	Optional<Colaborador> findByCargo(Cargo cargo);
+	List<Colaborador> findByCargo(Cargo cargo);
 }

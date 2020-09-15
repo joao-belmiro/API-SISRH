@@ -58,9 +58,9 @@ public class CargoController {
 		if (cargo == null) {
 			throw new NotFoundException("O cargo de id: "+ id +" não existe");
 		}
-		Colaborador colaborador = colaboradorManager.buscarPorCargo(cargo).orElse(null);
-		if(colaborador != null) {
-			throw new Exception("O Cargo de"+ cargo.getNomeCargo() + "não pode ser excluido, pois há colaboradores associados");
+		List<Colaborador> colaborador = colaboradorManager.buscarPorCargo(cargo);
+		if(!colaborador.isEmpty()) {
+			throw new Exception("O Cargo de "+ cargo.getNomeCargo() + " não pode ser excluido, pois há colaboradores associados");
 		} else {
 			cargoManager.deletarPorId(id);
 			return new ResponseEntity<Cargo>(HttpStatus.NO_CONTENT);			

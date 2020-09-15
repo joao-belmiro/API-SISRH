@@ -46,7 +46,7 @@ public class ColaboradorManager {
 	public List<Colaborador> colaboradoresDepartamento (Departamento departamento) {
 		return colaboradorRepository.findByDepartamento(departamento);
 	}
-	public Optional<Colaborador> buscarPorCargo (Cargo cargo) {
+	public List<Colaborador> buscarPorCargo (Cargo cargo) {
 		return colaboradorRepository.findByCargo(cargo);
 	}
 }
