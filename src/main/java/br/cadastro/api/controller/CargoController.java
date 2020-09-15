@@ -37,19 +37,20 @@ public class CargoController {
 	private ColaboradorManager colaboradorManager;
 
 	@PostMapping("salvar-cargo")
-	public @ResponseBody ResponseEntity<Cargo> salvarCargo(@RequestBody Cargo cargo) throws NullPointerException {
-		if (cargo.getNomeCargo() == null || cargo.getNomeCargo() == "") {
-			throw new NullPointerException("o Nome do cargo nao pode ser nulo");
-		} else {
+	public @ResponseBody ResponseEntity<Cargo> salvarCargo(@RequestBody Cargo cargo) {
 			Cargo cargoSalvo = cargoManager.salvar(cargo);
 			return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.CREATED);
-		}
 	}
 
 	@PutMapping("alterar-cargo")
-	public @ResponseBody ResponseEntity<Cargo> alterarCargo(@RequestBody Cargo cargo) {
-		Cargo cargoSalvo = cargoManager.salvar(cargo);
-		return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.NO_CONTENT);
+	public @ResponseBody ResponseEntity<Cargo> alterarCargo(@RequestBody Cargo cargo) throws NotFoundException {
+		Cargo cargoLocalizado = cargoManager.buscarPorId(cargo.getIdCargo()).orElse(null);
+		if (cargoLocalizado == null) {
+			throw new NotFoundException("O cargo a ser alterado não existe");
+		} else {
+			Cargo cargoSalvo = cargoManager.salvar(cargo);
+			return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.NO_CONTENT);			
+		}
 	}
 
 	@DeleteMapping("deletar-cargo/{id}")

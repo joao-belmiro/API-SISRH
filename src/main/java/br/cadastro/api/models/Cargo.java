@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,7 +28,7 @@ public class Cargo implements Serializable {
 	private Long idCargo;
 	
 	@Column(name = "NOME_CARGO", nullable = false)
-	
+	@NotNull(message = "Nome do Cargo não pode ser nulo")
 	private String nomeCargo;
 	
 	@Column(name = "DESCRICAO_CARGO", nullable = false)
