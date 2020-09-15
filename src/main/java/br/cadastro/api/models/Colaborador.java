@@ -73,6 +73,11 @@ public class Colaborador  implements Serializable {
 		return cargo.getNomeCargo();
 	}
 	
+	@JsonIgnore
+	public String getNomeDepartamento () {
+		return departamento.getNomeDepartamento();
+	}
+	
 	public String getCpfCnpj() {
 		return cpfCnpj;
 	}

@@ -11,6 +11,7 @@ import br.cadastro.api.models.Cargo;
 import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.models.Departamento;
 import br.cadastro.api.repository.ColaboradorRepository;
+import br.cadastro.api.repository.projections.ColaboradorProjection;
 
 @Service
 public class ColaboradorManager {
@@ -33,7 +34,7 @@ public class ColaboradorManager {
 	public List<Colaborador> buscarTodos() {
 		return colaboradorRepository.findAll();	
 	}
-	public List<Colaborador> buscarPorTag(String tag){
+	public List<ColaboradorProjection> buscarPorTag(String tag){
 		return colaboradorRepository.findByTag(tag);
 	}
 	public List<Colaborador> filtro(Colaborador filtro) {

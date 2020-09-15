@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.cadastro.api.manager.DepartamentoManager;
 import br.cadastro.api.manager.ColaboradorManager;
 import br.cadastro.api.models.Departamento;
+import br.cadastro.api.repository.projections.ColaboradorProjection;
 import javassist.NotFoundException;
 import br.cadastro.api.models.Colaborador;
 
@@ -75,12 +76,12 @@ public class ColaboradorController {
 		}
 	}
 	@GetMapping("buscar-por-tag")
-	public @ResponseBody ResponseEntity<List<Colaborador>> buscarTag(@RequestParam(required = true) String tag) {
+	public @ResponseBody ResponseEntity<List<ColaboradorProjection>> buscarTag(@RequestParam(required = true) String tag) {
 		if (tag == null || tag == "") {
-			return new ResponseEntity<List<Colaborador>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<ColaboradorProjection>>(HttpStatus.BAD_REQUEST);
 		} else {
-			List<Colaborador> funcionarios = colaboradorManager.buscarPorTag(tag);
-			return new ResponseEntity<List<Colaborador>>(funcionarios, HttpStatus.OK);
+			List<ColaboradorProjection> funcionarios = colaboradorManager.buscarPorTag(tag);
+			return new ResponseEntity<List<ColaboradorProjection>>(funcionarios, HttpStatus.OK);
 		}
 	}
 	@GetMapping("/{id}")
