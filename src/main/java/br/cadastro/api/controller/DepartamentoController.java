@@ -25,7 +25,6 @@ import br.cadastro.api.repository.projections.DepartamentoDash;
 import br.cadastro.api.repository.projections.DepartamentoProjection;
 import javassist.NotFoundException;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("gerenciamento-departamento")
 public class DepartamentoController {

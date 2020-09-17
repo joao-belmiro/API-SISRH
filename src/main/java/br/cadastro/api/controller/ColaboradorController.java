@@ -27,7 +27,6 @@ import br.cadastro.api.repository.projections.ColaboradorProjection;
 import javassist.NotFoundException;
 import br.cadastro.api.models.Colaborador;
 
-@CrossOrigin("*")
 @RestController
 @Controller
 @RequestMapping("gerenciamento-colaborador")

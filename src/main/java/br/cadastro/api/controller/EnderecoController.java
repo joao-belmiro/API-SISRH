@@ -20,7 +20,6 @@ import br.cadastro.api.manager.ColaboradorManager;
 import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.repository.projections.EnderecoProjetction;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("gerenciamento-endereco")
 public class EnderecoController {

@@ -25,7 +25,6 @@ import br.cadastro.api.repository.projections.CargoDashProjection;
 import br.cadastro.api.repository.projections.CargoProjection;
 import javassist.NotFoundException;
 
-@CrossOrigin("*")
 @RestController
 @RequestMapping("gerenciamento-cargo")
 public class CargoController {
