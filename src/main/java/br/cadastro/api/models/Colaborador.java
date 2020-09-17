@@ -74,6 +74,16 @@ public class Colaborador  implements Serializable {
 	}
 	
 	@JsonIgnore
+	public Long getIdCargo () {
+		return cargo.getIdCargo();
+	}
+	
+	@JsonIgnore
+	public Long getIdDepartamento () {
+		return departamento.getIdDepartamento();
+	}
+	
+	@JsonIgnore
 	public String getNomeDepartamento () {
 		return departamento.getNomeDepartamento();
 	}
@@ -137,7 +147,7 @@ public class Colaborador  implements Serializable {
 	public String getNomeColaborador() {
 		return nomeColaborador;
 	}
-
+	
 	public void setNomeColaborador(String nomeColaborador) {
 		this.nomeColaborador = nomeColaborador;
 	}

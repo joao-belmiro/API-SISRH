@@ -2,9 +2,6 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
