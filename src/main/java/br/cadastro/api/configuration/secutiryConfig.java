@@ -6,10 +6,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.cadastro.api.manager.UsuarioManager;
+import br.cadastro.api.security.JwtAuthFilter;
+import br.cadastro.api.security.JwtService;
 
 @EnableWebSecurity
 public class secutiryConfig extends WebSecurityConfigurerAdapter {
@@ -17,17 +22,23 @@ public class secutiryConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UsuarioManager usuarioManager;
 	
+	@Autowired
+	private JwtService jwtService;
+	
 	@Bean
 	public PasswordEncoder PasswordEncoder () {
 		return new BCryptPasswordEncoder();
 	}
 	
+	@Bean
+	public OncePerRequestFilter jwtFilter () {
+		return new JwtAuthFilter(jwtService, usuarioManager);
+	}
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-		.userDetailsService(usuarioManager)
-		.passwordEncoder(PasswordEncoder());
-		
+		auth.userDetailsService(usuarioManager).passwordEncoder(PasswordEncoder());
+
 	}
 	
 	@Override
@@ -41,8 +52,9 @@ public class secutiryConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/gerenciamento-endereco/**").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/usuario/**").permitAll()
 		.and()
-			.httpBasic()
-		.and().cors().disable();
+		 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		  .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 			
 	}
 }
