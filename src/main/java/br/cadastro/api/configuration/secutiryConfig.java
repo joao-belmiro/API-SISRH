@@ -1,5 +1,7 @@
 package br.cadastro.api.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,6 +12,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.cadastro.api.manager.UsuarioManager;
@@ -34,11 +39,23 @@ public class secutiryConfig extends WebSecurityConfigurerAdapter {
 	public OncePerRequestFilter jwtFilter () {
 		return new JwtAuthFilter(jwtService, usuarioManager);
 	}
-	
+		
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(usuarioManager).passwordEncoder(PasswordEncoder());
 
+	}
+	
+	@Bean
+	CorsConfigurationSource corsConfigurationSource () {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Headers","Access-Control-Allow-Origin","Access-Control-Request-Method", "Access-Control-Request-Headers","Origin","Cache-Control", "Content-Type", "Authorization"));
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
+		configuration.setAllowedMethods(Arrays.asList("DELETE", "GET", "POST", "PATCH", "PUT"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
 	}
 	
 	@Override
@@ -52,9 +69,12 @@ public class secutiryConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/gerenciamento-endereco/**").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/usuario/**").permitAll()
 		.and()
-		 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)		 
 		.and()
-		  .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
-			
+		  .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class)
+		  .cors().configurationSource(corsConfigurationSource());
+		
+		
 	}
+	
 }
