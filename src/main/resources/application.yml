@@ -24,5 +24,5 @@ server:
   port: 8082
 
 security.jwt:
-  expricao: 30
+  expricao: 120
   chave-assinatura: am9hbyBjYXJsb3MgYmVsbWlybyBnb27Dp2FsdmVz

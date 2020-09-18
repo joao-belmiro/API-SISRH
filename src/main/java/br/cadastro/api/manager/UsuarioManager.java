@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.cadastro.api.exceptions.CredenciaisIncorretasException;
 import br.cadastro.api.models.Usuario;
 import br.cadastro.api.repository.UsuarioRepository;
-import ch.qos.logback.core.encoder.Encoder;
 
 @Service
 public class UsuarioManager implements UserDetailsService {
