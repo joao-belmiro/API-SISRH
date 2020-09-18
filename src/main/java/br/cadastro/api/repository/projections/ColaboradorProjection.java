@@ -13,4 +13,5 @@ public interface ColaboradorProjection {
 	String getNomeCargo();
 	String getNomeDepartamento();
 	String getTelefone();
+	Double getSalario();
 }
