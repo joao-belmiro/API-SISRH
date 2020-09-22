@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -60,7 +61,11 @@ public class secutiryConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/gerenciamento-colaborador/**").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/gerenciamento-departamento/**").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/gerenciamento-endereco/**").hasAnyRole("USER", "ADMIN")
-			.antMatchers("/usuario/**").permitAll()
+			.antMatchers(HttpMethod.POST,"/usuario/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/usuario/tag").hasRole("ADMIN")
+			.antMatchers("/h2/**").permitAll()
+		.and()
+			.headers().frameOptions().sameOrigin()
 		.and()
 		 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)		 
 		.and()
