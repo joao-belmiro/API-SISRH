@@ -4,7 +4,14 @@ public class TokenDto {
 	
 	private String login;
 	private String token;
+	private Boolean adm;
 	
+	public Boolean getAdm() {
+		return adm;
+	}
+	public void setAdm(Boolean adm) {
+		this.adm = adm;
+	}
 	public String getLogin() {
 		return login;
 	}
