@@ -48,6 +48,9 @@ public class UsuarioManager implements UserDetailsService {
 		}
 	}
 	
+	public void deletar (Long id) {
+		usuarioRepository.deleteById(id);
+	}
 	public List<UserData> buscarPorTag (String tag) {
 		return usuarioRepository.buscarPorTag(tag);
 	}
