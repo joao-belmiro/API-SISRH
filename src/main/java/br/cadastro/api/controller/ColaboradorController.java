@@ -2,6 +2,7 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class ColaboradorController {
 	private DepartamentoManager departamentoManager;
 
 	@PostMapping("salvar-colaborador")
-	public @ResponseBody ResponseEntity<Colaborador> salvarFuncionario(@RequestBody Colaborador colaborador)
+	public @ResponseBody ResponseEntity<Colaborador> salvarFuncionario(@Valid @RequestBody Colaborador colaborador)
 			throws IllegalArgumentException, ValidationException, NullPointerException {
 		if (colaborador.getDepartamento().getIdDepartamento() == null) {
 			throw new IllegalArgumentException("Não é possivel cadastrar um colaborador sem Departamento");

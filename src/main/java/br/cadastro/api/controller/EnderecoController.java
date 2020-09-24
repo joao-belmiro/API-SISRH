@@ -1,5 +1,7 @@
 package br.cadastro.api.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +32,7 @@ public class EnderecoController {
 	private ColaboradorManager funcionarioManager;
 	
 	@PostMapping("salvar-endereco")
-	public @ResponseBody ResponseEntity<EnderecoDto> salvarEndereco(@RequestBody EnderecoDto enderecodto) {
+	public @ResponseBody ResponseEntity<EnderecoDto> salvarEndereco(@Valid @RequestBody EnderecoDto enderecodto) {
 		Colaborador funcionarioLoacalizado = funcionarioManager.buscarPorId(enderecodto.getColaborador().getIdColaborador()).orElse(null);
 		if (funcionarioLoacalizado == null) {
 			return new  ResponseEntity<EnderecoDto>(enderecodto,HttpStatus.BAD_REQUEST);
@@ -41,7 +43,7 @@ public class EnderecoController {
 		
 	}
 	@PutMapping("alterar-endereco")
-	public @ResponseBody ResponseEntity<EnderecoDto> alterarEndereco(@RequestBody EnderecoDto enderecodto) {
+	public @ResponseBody ResponseEntity<EnderecoDto> alterarEndereco(@Valid @RequestBody EnderecoDto enderecodto) {
 		Colaborador funcionarioLoacalizado = funcionarioManager.buscarPorId(enderecodto.getColaborador().getIdColaborador()).orElse(null);
 		if (enderecodto.getIdEndereco() == 0 || funcionarioLoacalizado == null) {
 			return new  ResponseEntity<EnderecoDto>(HttpStatus.BAD_REQUEST);

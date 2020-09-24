@@ -2,6 +2,8 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,7 @@ public class DepartamentoController {
 	private ColaboradorManager colaboradorManager;
 
 	@PostMapping("salvar-departamento")
-	public @ResponseBody ResponseEntity<Departamento> salvarDepartamento(@RequestBody Departamento departamento)
+	public @ResponseBody ResponseEntity<Departamento> salvarDepartamento(@Valid @RequestBody Departamento departamento)
 			throws NullPointerException {
 		if (departamento.getNomeDepartamento() == null || departamento.getNomeDepartamento() == "") {
 			throw new NullPointerException("Digite um Nome para o Departamento");

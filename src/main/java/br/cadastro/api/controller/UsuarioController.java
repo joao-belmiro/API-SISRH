@@ -1,6 +1,9 @@
 package br.cadastro.api.controller;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +44,7 @@ public class UsuarioController {
 	private JwtService jwtService;
 
 	@PostMapping("criar")
-	public ResponseEntity<Usuario> salvarUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> salvarUsuario(@Valid @RequestBody Usuario usuario) {
 
 		String senhaCriptografada = encoder.encode(usuario.getSenha());
 		usuario.setSenha(senhaCriptografada);

@@ -2,6 +2,8 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +37,13 @@ public class CargoController {
 	private ColaboradorManager colaboradorManager;
 
 	@PostMapping("salvar-cargo")
-	public @ResponseBody ResponseEntity<Cargo> salvarCargo(@RequestBody Cargo cargo) {
+	public @ResponseBody ResponseEntity<Cargo> salvarCargo(@Valid @RequestBody Cargo cargo) {
 			Cargo cargoSalvo = cargoManager.salvar(cargo);
 			return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.CREATED);
 	}
 
 	@PutMapping("alterar-cargo")
-	public @ResponseBody ResponseEntity<Cargo> alterarCargo(@RequestBody Cargo cargo) throws NotFoundException {
+	public @ResponseBody ResponseEntity<Cargo> alterarCargo(@Valid @RequestBody Cargo cargo) throws NotFoundException {
 		Cargo cargoLocalizado = cargoManager.buscarPorId(cargo.getIdCargo()).orElse(null);
 		if (cargoLocalizado == null) {
 			throw new NotFoundException("O cargo a ser alterado não existe");
