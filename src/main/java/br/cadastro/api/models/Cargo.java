@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -28,9 +29,12 @@ public class Cargo implements Serializable {
 	private Long idCargo;
 	
 	@Column(name = "NOME_CARGO", nullable = false)
+	@NotBlank(message =  "O nome do Cargo não pode ser espaço em vazio")
 	@NotNull(message = "Nome do Cargo não pode ser nulo")
 	private String nomeCargo;
 	
+	@NotBlank(message =  "Descrição não pode ser espaço em vazio")
+	@NotNull(message = "Descrição não pode ser nula")
 	@Column(name = "DESCRICAO_CARGO", nullable = false)
 	private String descricaoCargo;
 	

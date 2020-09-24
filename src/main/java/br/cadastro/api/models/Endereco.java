@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -25,13 +26,15 @@ public class Endereco implements Serializable {
 	@Column(name ="ID_ENDERECO")
 	private long idEndereco;
 	
+	@NotNull(message = "o cep não pode ser nulo")
 	@Column(name ="CEP", nullable = false)
 	private String cep;
 	
+	@NotNull(message = "o número não pode ser nulo")
 	@Column(name = "NUMERO", nullable = false)
 	private String numero;
 	
-	@Column(name = "COMPLEMENTO", nullable = false)	
+	@Column(name = "COMPLEMENTO")	
 	private String complemento;
 	
 	@JsonBackReference

@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -18,14 +20,15 @@ public class Usuario {
 	private Long id;
 	
 	@Column(name = "LOGIN" , nullable = false)
-	@NotNull(message = "nome de usuario obrigatório")
+	@NotEmpty(message = "O login Não pode ser um espaço vazio")
 	private String login;
 	
 	@Column(name = "SENHA", nullable = false)
-	@NotNull(message = "senha obrigatória")
+	@NotEmpty(message = "A senha Não pode ser um espaço vazio")
 	private String senha;
 	
-	@Column(name = "ADMIN")
+	@Column(name = "ADMIN",nullable = false)
+	@NotBlank(message = "Tipo de Administrador Não pode ser um espaço vazio")
 	private Boolean admin;
 
 	public Long getId() {

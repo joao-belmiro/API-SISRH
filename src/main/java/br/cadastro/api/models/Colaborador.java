@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -21,8 +23,6 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
 
 @Entity
 @Table(name = "COLABORADOR")
@@ -39,10 +39,11 @@ public class Colaborador  implements Serializable {
 	@Column(name = "NOME_COLABORADOR",nullable = false)
 	private String nomeColaborador;
 	
-	@NotNull(message="O Número do documentpo não pode Ser Nulo")
+	@NotNull(message="O Número do documento não pode Ser Nulo")
 	@Column(name="CPF_CNPJ",nullable = false)
 	private String cpfCnpj;
 	
+	@NotBlank(message = "O salario não pode ser um espaço em branco")
 	@Column(name = "SALARIO",nullable = false)
 	private double salario;
 	
@@ -50,22 +51,25 @@ public class Colaborador  implements Serializable {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "America/Belem")
 	@Column(name = "DATA_CONTRATACAO", nullable = false)
 	private Date dataContratacao;
-		
-	@Column(name="TELEFONE")
+	
+	@NotBlank(message = "O Telefone não pode ser um espaço em branco")
+	@Column(name="TELEFONE" ,nullable = false)
 	private String telefone;
 	
-	@Column(name="EMAIL")
+	@Email
+	@NotBlank(message = "O E-mail não pode ser um espaço em branco")
+	@Column(name="EMAIL", nullable = false)
 	private String email;
 	
 	@ManyToOne( fetch = FetchType.EAGER)
-	@JoinColumn(name = "ID_DEPARTAMENTO_FK")
+	@JoinColumn(name = "ID_DEPARTAMENTO_FK", nullable = false)
 	private Departamento departamento;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="ID_CARGO_FK")
+	@JoinColumn(name="ID_CARGO_FK", nullable = false)
 	private Cargo cargo;
 	
-	@OneToOne(mappedBy = "colaborador",fetch = FetchType.LAZY, cascade = CascadeType.ALL) //lembrar qual colocar
+	@OneToOne(mappedBy = "colaborador",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Endereco endereco;
 
 	@JsonIgnore

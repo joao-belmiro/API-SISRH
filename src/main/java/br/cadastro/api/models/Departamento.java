@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -27,11 +29,12 @@ public class Departamento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="ID_DEPARTAMENTO")
 	private Long idDepartamento;
-	
-	@Column(name ="NOME_DEPARTAMENTO")
+
+	@NotBlank(message = "O nome do departamento não pode ser um espaço vazio")
+	@Column(name ="NOME_DEPARTAMENTO", nullable = false)
 	private String nomeDepartamento;
 	
-
+	@NotBlank(message = "A descrição do departamento não pode ser um espaço vazio")
 	@Column(name="DESCRICAO_DEPARTAMENTO")
 	private String descricao;
 	
