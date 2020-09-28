@@ -33,7 +33,7 @@ public class Colaborador  implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name ="ID_COLABORADOR")
-	private long idColaborador;
+	private Long idColaborador;
 	
 	@NotNull(message="Nome do Colaborador não pode Ser Nulo")
 	@Column(name = "NOME_COLABORADOR",nullable = false)
@@ -43,9 +43,8 @@ public class Colaborador  implements Serializable {
 	@Column(name="CPF_CNPJ",nullable = false)
 	private String cpfCnpj;
 	
-	@NotBlank(message = "O salario não pode ser um espaço em branco")
 	@Column(name = "SALARIO",nullable = false)
-	private double salario;
+	private Double salario;
 	
 	@DateTimeFormat(iso = ISO.DATE_TIME)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "America/Belem")
