@@ -7,22 +7,18 @@ springdoc:
       enabled: false
 spring:
  datasource:
-  url: jdbc:h2:file:c:/users/14908/Desktop/testes vuejs/h2/h2db
-  driver-class-name: org.h2.Driver  
-  username: sa
+  url: ${DATABASE_URL}
+  driver-class-name: org.postgresql.Driver
+  username: ${DATABASE_USERNAME}
+  password: ${DATABASE_PASSWORD}
  jpa:
-   database-platform: org.hibernate.dialect.H2Dialect  
+   database-platform: org.hibernate.dialect.PostgreSQLDialect
    show-sql: true
    hibernate:
-    ddl-auto: update
- h2:    
-    console:
-      enabled: true      
-      path: /h2
-
+    ddl-auto: none
 server:
-  port: 8082
+  port: 8080
 
 security.jwt:
   expricao: 120
-  chave-assinatura: am9hbyBjYXJsb3MgYmVsbWlybyBnb27Dp2FsdmVz
+  chave-assinatura: ${APP_SECRET}
