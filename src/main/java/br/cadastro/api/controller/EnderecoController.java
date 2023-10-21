@@ -1,6 +1,6 @@
 package br.cadastro.api.controller;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,32 +27,36 @@ public class EnderecoController {
 
 	@Autowired
 	private EnderecoManager enderecoManager;
-	
+
 	@Autowired
 	private ColaboradorManager funcionarioManager;
-	
+
 	@PostMapping("salvar-endereco")
 	public @ResponseBody ResponseEntity<EnderecoDto> salvarEndereco(@Valid @RequestBody EnderecoDto enderecodto) {
-		Colaborador funcionarioLoacalizado = funcionarioManager.buscarPorId(enderecodto.getColaborador().getIdColaborador()).orElse(null);
+		Colaborador funcionarioLoacalizado = funcionarioManager
+				.buscarPorId(enderecodto.getColaborador().getIdColaborador()).orElse(null);
 		if (funcionarioLoacalizado == null) {
-			return new  ResponseEntity<EnderecoDto>(enderecodto,HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<EnderecoDto>(enderecodto, HttpStatus.BAD_REQUEST);
 		} else {
 			EnderecoDto enderecoCriado = enderecoManager.salvar(enderecodto);
-			return new ResponseEntity<EnderecoDto>(enderecoCriado,HttpStatus.CREATED);
+			return new ResponseEntity<EnderecoDto>(enderecoCriado, HttpStatus.CREATED);
 		}
-		
+
 	}
+
 	@PutMapping("alterar-endereco")
 	public @ResponseBody ResponseEntity<EnderecoDto> alterarEndereco(@Valid @RequestBody EnderecoDto enderecodto) {
-		Colaborador funcionarioLoacalizado = funcionarioManager.buscarPorId(enderecodto.getColaborador().getIdColaborador()).orElse(null);
+		Colaborador funcionarioLoacalizado = funcionarioManager
+				.buscarPorId(enderecodto.getColaborador().getIdColaborador()).orElse(null);
 		if (enderecodto.getIdEndereco() == 0 || funcionarioLoacalizado == null) {
-			return new  ResponseEntity<EnderecoDto>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<EnderecoDto>(HttpStatus.BAD_REQUEST);
 		} else {
 			enderecoManager.salvar(enderecodto);
 			return new ResponseEntity<EnderecoDto>(HttpStatus.NO_CONTENT);
 		}
-		
+
 	}
+
 	@DeleteMapping("deletar-endereco/{id}")
 	public @ResponseBody ResponseEntity<EnderecoProjetction> deletarEndereco(@PathVariable long id) {
 		EnderecoProjetction enderecoLocalizado = enderecoManager.buscarPorId(id).orElse(null);
@@ -63,10 +67,11 @@ public class EnderecoController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+
 	@GetMapping("endereco-id/{id}")
 	public @ResponseBody ResponseEntity<EnderecoProjetction> buscarPorId(@PathVariable long id) {
 		EnderecoProjetction endereco = enderecoManager.buscarPorId(id).orElse(null);
-		return new ResponseEntity<EnderecoProjetction>(endereco,HttpStatus.OK);
+		return new ResponseEntity<EnderecoProjetction>(endereco, HttpStatus.OK);
 	}
-	
+
 }

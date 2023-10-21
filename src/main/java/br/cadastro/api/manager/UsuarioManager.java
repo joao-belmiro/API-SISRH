@@ -24,13 +24,10 @@ public class UsuarioManager implements UserDetailsService {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
-	@Autowired
 	private PasswordEncoder encoder;
 
-	@Autowired
 	private JwtService jwtService;
 
-	@Transactional
 	public Usuario salvarUsuario(Usuario user) throws UsernameNotFoundException, CredenciaisIncorretasException {
 		return usuarioRepository.save(user);
 	}

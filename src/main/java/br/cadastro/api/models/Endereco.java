@@ -2,46 +2,45 @@ package br.cadastro.api.models;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-
 @Entity
-@Table(name= "ENDERECO")
+@Table(name = "ENDERECO")
 public class Endereco implements Serializable {
 	private static final long serialVersionUID = 8125844071176465703L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name ="ID_ENDERECO")
+	@Column(name = "ID_ENDERECO")
 	private long idEndereco;
-	
+
 	@NotNull(message = "o cep não pode ser nulo")
-	@Column(name ="CEP", nullable = false)
+	@Column(name = "CEP", nullable = false)
 	private String cep;
-	
+
 	@NotNull(message = "o número não pode ser nulo")
 	@Column(name = "NUMERO", nullable = false)
 	private String numero;
-	
-	@Column(name = "COMPLEMENTO")	
+
+	@Column(name = "COMPLEMENTO")
 	private String complemento;
-	
+
 	@JsonBackReference
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ID_FUNCIONARIO_FK")
+	@JoinColumn(name = "ID_FUNCIONARIO_FK")
 	private Colaborador colaborador;
-	
+
 	public long getIdEndereco() {
 		return idEndereco;
 	}
@@ -86,5 +85,4 @@ public class Endereco implements Serializable {
 		return serialVersionUID;
 	}
 
-		
 }

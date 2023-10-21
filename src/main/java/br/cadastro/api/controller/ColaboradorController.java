@@ -2,8 +2,8 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-import javax.validation.ValidationException;
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.cadastro.api.manager.DepartamentoManager;
 import br.cadastro.api.manager.ColaboradorManager;
 import br.cadastro.api.models.Departamento;
 import br.cadastro.api.repository.projections.ColaboradorProjection;
-import javassist.NotFoundException;
 import br.cadastro.api.models.Colaborador;
 
 @RestController
@@ -54,28 +54,32 @@ public class ColaboradorController {
 
 	@PutMapping("alterar-colaborador")
 	public @ResponseBody ResponseEntity<Colaborador> alterarFuncionario(@RequestBody Colaborador colaborador)
-			throws NotFoundException {
+			throws ResponseStatusException {
 		Colaborador funcionarioLocalizado = colaboradorManager.buscarPorId(colaborador.getIdColaborador()).orElse(null);
 		if (funcionarioLocalizado == null) {
-			throw new NotFoundException("Colaborador Inexistente");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Colaborador Inexistente");
 		} else {
 			colaboradorManager.alterar(colaborador);
 			return new ResponseEntity<Colaborador>(HttpStatus.NO_CONTENT);
 		}
 	}
+
 	@DeleteMapping("deletar/{id}")
 	public @ResponseBody ResponseEntity<Colaborador> deletarFuncionario(@PathVariable Long id)
-			throws NotFoundException {
+			throws ResponseStatusException {
 		Colaborador funcionarioLocalizado = colaboradorManager.buscarPorId(id).orElse(null);
 		if (funcionarioLocalizado != null) {
 			colaboradorManager.deletarPorId(id);
 			return new ResponseEntity<Colaborador>(HttpStatus.NO_CONTENT);
 		} else {
-			throw new NotFoundException("Colaborador não pode ser localizado ou nao existe");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Colaborador não pode ser localizado ou nao existe");
 		}
 	}
+
 	@GetMapping("buscar-por-tag")
-	public @ResponseBody ResponseEntity<List<ColaboradorProjection>> buscarTag(@RequestParam(required = true) String tag) {
+	public @ResponseBody ResponseEntity<List<ColaboradorProjection>> buscarTag(
+			@RequestParam(required = true) String tag) {
 		if (tag == null || tag == "") {
 			return new ResponseEntity<List<ColaboradorProjection>>(HttpStatus.BAD_REQUEST);
 		} else {
@@ -83,20 +87,24 @@ public class ColaboradorController {
 			return new ResponseEntity<List<ColaboradorProjection>>(funcionarios, HttpStatus.OK);
 		}
 	}
+
 	@GetMapping("/{id}")
-	public @ResponseBody ResponseEntity<Colaborador> buscarPorId(@PathVariable Long id) throws NotFoundException {
+	public @ResponseBody ResponseEntity<Colaborador> buscarPorId(@PathVariable Long id) throws ResponseStatusException {
 		Colaborador funcionarioLocalizado = colaboradorManager.buscarPorId(id).orElse(null);
 		if (funcionarioLocalizado == null) {
-			throw new NotFoundException("O Código" + id + "não Localizou Nenhum Colaborador");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"O Código" + id + "não Localizou Nenhum Colaborador");
 		} else {
 			return new ResponseEntity<Colaborador>(funcionarioLocalizado, HttpStatus.OK);
 		}
 	}
+
 	@GetMapping("novos-colabs")
 	public @ResponseBody ResponseEntity<List<Colaborador>> novosColabs() {
 		List<Colaborador> colabs = colaboradorManager.novosColabs();
 		return new ResponseEntity<List<Colaborador>>(colabs, HttpStatus.OK);
 	}
+
 	@GetMapping("colaboradores-departamento")
 	public @ResponseBody ResponseEntity<List<Colaborador>> colabsDepartamento(
 			@RequestParam(required = true) long idDepartamento) {

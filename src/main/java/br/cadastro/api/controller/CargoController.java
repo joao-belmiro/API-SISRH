@@ -2,7 +2,7 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.cadastro.api.manager.CargoManager;
 import br.cadastro.api.manager.ColaboradorManager;
@@ -24,7 +25,6 @@ import br.cadastro.api.models.Cargo;
 import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.repository.projections.CargoDashProjection;
 import br.cadastro.api.repository.projections.CargoProjection;
-import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("gerenciamento-cargo")
@@ -38,35 +38,38 @@ public class CargoController {
 
 	@PostMapping("salvar-cargo")
 	public @ResponseBody ResponseEntity<Cargo> salvarCargo(@Valid @RequestBody Cargo cargo) {
-			Cargo cargoSalvo = cargoManager.salvar(cargo);
-			return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.CREATED);
+		Cargo cargoSalvo = cargoManager.salvar(cargo);
+		return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.CREATED);
 	}
 
 	@PutMapping("alterar-cargo")
-	public @ResponseBody ResponseEntity<Cargo> alterarCargo(@Valid @RequestBody Cargo cargo) throws NotFoundException {
+	public @ResponseBody ResponseEntity<Cargo> alterarCargo(@Valid @RequestBody Cargo cargo)
+			throws ResponseStatusException {
 		Cargo cargoLocalizado = cargoManager.buscarPorId(cargo.getIdCargo()).orElse(null);
 		if (cargoLocalizado == null) {
-			throw new NotFoundException("O cargo a ser alterado não existe");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "O cargo a ser alterado não existe");
 		} else {
 			Cargo cargoSalvo = cargoManager.salvar(cargo);
-			return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.NO_CONTENT);			
+			return new ResponseEntity<Cargo>(cargoSalvo, HttpStatus.NO_CONTENT);
 		}
 	}
 
 	@DeleteMapping("deletar-cargo/{id}")
-	public @ResponseBody ResponseEntity<Cargo> deletarCargo(@PathVariable Long id) throws NotFoundException ,Exception {
+	public @ResponseBody ResponseEntity<Cargo> deletarCargo(@PathVariable Long id)
+			throws ResponseStatusException, Exception {
 		Cargo cargo = cargoManager.buscarPorId(id).orElse(null);
 		if (cargo == null) {
-			throw new NotFoundException("O cargo de id: "+ id +" não existe");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "O cargo de id: " + id + " não existe");
 		}
 		List<Colaborador> colaborador = colaboradorManager.buscarPorCargo(cargo);
-		if(!colaborador.isEmpty()) {
-			throw new Exception("O Cargo de "+ cargo.getNomeCargo() + " não pode ser excluido, pois há colaboradores associados");
+		if (!colaborador.isEmpty()) {
+			throw new Exception(
+					"O Cargo de " + cargo.getNomeCargo() + " não pode ser excluido, pois há colaboradores associados");
 		} else {
 			cargoManager.deletarPorId(id);
-			return new ResponseEntity<Cargo>(HttpStatus.NO_CONTENT);			
+			return new ResponseEntity<Cargo>(HttpStatus.NO_CONTENT);
 		}
-			
+
 	}
 
 	@GetMapping("todos-cargos")

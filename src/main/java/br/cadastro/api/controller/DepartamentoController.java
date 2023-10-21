@@ -2,7 +2,7 @@ package br.cadastro.api.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.cadastro.api.manager.ColaboradorManager;
 import br.cadastro.api.manager.DepartamentoManager;
@@ -24,7 +25,6 @@ import br.cadastro.api.models.Colaborador;
 import br.cadastro.api.models.Departamento;
 import br.cadastro.api.repository.projections.DepartamentoDash;
 import br.cadastro.api.repository.projections.DepartamentoProjection;
-import javassist.NotFoundException;
 
 @RestController
 @RequestMapping("gerenciamento-departamento")
@@ -32,7 +32,7 @@ public class DepartamentoController {
 
 	@Autowired
 	private DepartamentoManager departamentoManager;
-	
+
 	@Autowired
 	private ColaboradorManager colaboradorManager;
 
@@ -48,28 +48,31 @@ public class DepartamentoController {
 	}
 
 	@PutMapping("alterar-departamento")
-	public @ResponseBody ResponseEntity<Departamento> alterarDepartamento(@RequestBody Departamento departamento) throws NotFoundException {
+	public @ResponseBody ResponseEntity<Departamento> alterarDepartamento(@RequestBody Departamento departamento)
+			throws ResponseStatusException {
 		Departamento departamentoLocalizado = departamentoManager.buscarPorId(departamento.getIdDepartamento())
 				.orElse(null);
 		if (departamentoLocalizado != null) {
 			departamentoManager.salvar(departamento);
 			return new ResponseEntity<Departamento>(HttpStatus.NO_CONTENT);
 		} else {
-			throw new NotFoundException("Departamento Inexistente");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Departamento Inexistente");
 		}
 	}
+
 	@DeleteMapping("deletar-departamento/{id}")
-	public @ResponseBody ResponseEntity<Departamento> deletarDepartamento(@PathVariable Long id) throws NotFoundException , Exception {
+	public @ResponseBody ResponseEntity<Departamento> deletarDepartamento(@PathVariable Long id)
+			throws ResponseStatusException, Exception {
 		Departamento deptLocalizado = departamentoManager.buscarPorId(id).orElse(null);
 		List<Colaborador> colabs = colaboradorManager.colaboradoresDepartamento(deptLocalizado);
 		if (!colabs.isEmpty()) {
 			throw new Exception("Não é possível Excluir um Departamento com Colaboradores");
 		}
-		if(deptLocalizado == null) {
-			throw new NotFoundException("Departamento inexistente");
+		if (deptLocalizado == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Departamento inexistente");
 		} else {
 			departamentoManager.deletarPorId(id);
-			return new ResponseEntity<Departamento>(HttpStatus.NO_CONTENT);						
+			return new ResponseEntity<Departamento>(HttpStatus.NO_CONTENT);
 		}
 	}
 
