@@ -1,10 +1,10 @@
 
 spring:
  datasource:
-  url: ${DATABASE_URL}
+  url: jdbc:postgresql://dpg-ckomhck1tcps73antitg-a:5432/rhservice
   driver-class-name: org.postgresql.Driver
-  username: ${DATABASE_USERNAME}
-  password: ${DATABASE_PASSWORD}
+  username: joaobelmiro
+  password: yinTG5nuI7JwnMah0poK3xfZGc6VwhKg
  jpa:
    database-platform: org.hibernate.dialect.PostgreSQLDialect
    show-sql: true
@@ -15,4 +15,4 @@ server:
 
 security.jwt:
   expricao: 120
-  chave-assinatura: ${APP_SECRET}
+  chave-assinatura: am9hbyBjYXJsb3MgYmVsbWlybyBnb27Dp2FsdmVz
